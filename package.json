@@ -1,0 +1,35 @@
+{
+    "name": "delete-test-01",
+    "description": "delete-test-01-description",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.398.0",
+        "@aws-sdk/lib-dynamodb": "^3.398.0",
+        "@jigjoy-io/serverless-core": "^0.0.3",
+        "@types/aws-lambda": "^8.10.158",
+        "uuid": "^13.0.0"
+    },
+    "devDependencies": {
+        "aws-sdk-client-mock": "^2.0.0",
+        "jest": "^29.2.1"
+    },
+    "scripts": {
+        "build": "sam build --profile Development",
+        "deploy": "sam deploy --profile Development --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND",
+        "serve": "sam local start-api --profile Development --port 3002 --region eu-west-1 --env-vars env.json",
+        "start": "sam local start-api --profile Development --port 3002 --region eu-west-1 --env-vars env.json"
+    },
+    "jest": {
+        "testMatch": [
+            "**/__tests__/**/*.[jt]s?(x)",
+            "**/?(*.)+(spec|test).[jt]s?(x)",
+            "**/__tests__/**/*.mjs?(x)",
+            "**/?(*.)+(spec|test).mjs?(x)"
+        ],
+        "moduleFileExtensions": [
+            "mjs",
+            "js"
+        ]
+    }
+}
