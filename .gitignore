@@ -1,3 +1,5 @@
 node_modules
 .npmrc
 .aws-sam
+
+env.json
