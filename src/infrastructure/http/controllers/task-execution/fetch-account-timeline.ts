@@ -1,5 +1,5 @@
 import { TaskExecution } from "@domain/entities/task-execution"
-import { fetchTimelineByProjectId } from "@infrastructure/dependencies"
+import { fetchTimelineByAccountId } from "@infrastructure/dependencies"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 
@@ -7,11 +7,11 @@ export async function fetchAccountTimelineHandler(event: APIGatewayProxyEvent): 
 	try {
         const qs = event.queryStringParameters || {}
 
-        const projectId = qs.projectId
+        const accountId = qs.accountId
         const pageNumber = qs.page ? parseInt(qs.page, 10) : 1
         const pageSize = qs.size ? parseInt(qs.size, 10) : 25
 
-        if (!projectId) {
+        if (!accountId) {
             throw new ValidationError("Missing required query param: projectId")
         }
 
@@ -25,7 +25,7 @@ export async function fetchAccountTimelineHandler(event: APIGatewayProxyEvent): 
         }
 
         try {
-            const activities: TaskExecution[] = await fetchTimelineByProjectId.execute(projectId, pagination)
+            const activities: TaskExecution[] = await fetchTimelineByAccountId.execute(accountId, pagination)
             return Responses._200(activities)
 		} catch (error) {
 			// TODO: Handle Project Not Found

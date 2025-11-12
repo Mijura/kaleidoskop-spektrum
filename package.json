@@ -1,6 +1,6 @@
 {
-    "name": "delete-test-01",
-    "description": "delete-test-01-description",
+    "name": "observability",
+    "description": "Observability microservice",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
@@ -17,8 +17,8 @@
     "scripts": {
         "build": "sam build --profile Development",
         "deploy": "sam deploy --profile Development --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND",
-        "serve": "sam local start-api --profile Development --port 3002 --region eu-west-1 --env-vars env.json",
-        "start": "sam local start-api --profile Development --port 3002 --region eu-west-1 --env-vars env.json"
+        "serve": "sam local start-api --profile Development --port 3003 --region eu-west-1 --env-vars env.json",
+        "start": "sam local start-api --profile Development --port 3003 --region eu-west-1 --env-vars env.json"
     },
     "jest": {
         "testMatch": [
