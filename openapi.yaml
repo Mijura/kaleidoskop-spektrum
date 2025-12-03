@@ -1,0 +1,65 @@
+openapi: 3.0.1
+info:
+  title: Observability API
+  version: "1.0.0"
+  description: >
+    Observability microservice: task execution timelines and heatmap.
+
+servers:
+  - url: http://localhost:9000
+    description: Local SAM API
+
+paths:
+  /task-execution/project/timeline:
+    get:
+      summary: Fetch project timeline
+      description: Fetches task execution timeline for a project.
+      operationId: fetchProjectTimeline
+      responses:
+        '200':
+          description: Project timeline fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /task-execution/account/timeline:
+    get:
+      summary: Fetch account timeline
+      description: Fetches task execution timeline for an account.
+      operationId: fetchAccountTimeline
+      responses:
+        '200':
+          description: Account timeline fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /task-execution/heatmap:
+    get:
+      summary: Fetch task execution heatmap
+      description: Fetches a heatmap of task executions.
+      operationId: fetchHeatmap
+      responses:
+        '200':
+          description: Heatmap fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
