@@ -8,42 +8,43 @@ import { HeatmapDTO } from "@application/dto/heatmap"
 import { TaskExecutionMapper } from "@infrastructure/repositories/mappers/task-execution-mapper"
 import { TaskExecutionRecord } from "@infrastructure/repositories/records/task-execution"
 
-const client = new DynamoDBClient({
-    region: process.env.AWS_REGION,
-    profile: process.env.AWS_PROFILE,
-})
-const ddbDocClient = DynamoDBDocumentClient.from(client)
-
 export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository {
+
+    private readonly docClient: DynamoDBDocumentClient
+    private readonly tableName: string
+
+    constructor() {
+        const client = new DynamoDBClient({})
+        this.docClient = DynamoDBDocumentClient.from(client)
+        this.tableName = process.env.TASK_EXECUTION_TABLE || "TaskExecution"
+    }
+    
     async save(taskExecution: TaskExecution): Promise<TaskExecution> {
         if (!taskExecution.id) {
             throw new Error("taskExecution.id is required for saving. Missing ID may cause unintended document creation.")
         }
-
-        const tableName = process.env.TASK_EXECUTION_TABLE
-        console.log(`Saving task execution with id: ${taskExecution.id} to DynamoDB table ${tableName}`)
+        console.log(`Saving task execution with id: ${taskExecution.id} to DynamoDB table ${this.tableName}`)
 
         const taskExecutionRecord: TaskExecutionRecord = TaskExecutionMapper.toRecord(taskExecution)
 
         const params = {
-            TableName: tableName,
+            TableName: this.tableName,
             Item: taskExecutionRecord,
         }
 
-        await ddbDocClient.send(new PutCommand(params))
+        await this.docClient.send(new PutCommand(params))
         return taskExecution
     }
 
     async get(taskExecutionId: string): Promise<TaskExecution | null> {
-        const tableName = process.env.TASK_EXECUTION_TABLE
-        console.log(`Fetching task execution by id: ${taskExecutionId} from DynamoDB table ${tableName}`)
+        console.log(`Fetching task execution by id: ${taskExecutionId} from DynamoDB table ${this.tableName}`)
         
         const params = {
-            TableName: tableName,
+            TableName: this.tableName,
             Key: { id: taskExecutionId },
         }
 
-        const { Item: item } = await ddbDocClient.send(new GetCommand(params))
+        const { Item: item } = await this.docClient.send(new GetCommand(params))
 
         if (!item) return null
 
@@ -52,11 +53,11 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
     }
 
     async getTimelineByProjectId(projectId: string, pagination: PaginationDTO): Promise<TaskExecution[]> {
-        const tableName = process.env.TASK_EXECUTION_TABLE
+
         console.log(`Fetching task execution timeline for projectId: ${projectId} with pagination: ${JSON.stringify(pagination)}`)
         
         const params = {
-            TableName: tableName,
+            TableName: this.tableName,
             IndexName: "projectTimelineGSI",
             KeyConditionExpression: "projectId = :projectId",
             ExpressionAttributeValues: {
@@ -73,18 +74,18 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
             console.warn("Pagination beyond first page not fully implemented for DynamoDB")
         }
 
-        const result = await ddbDocClient.send(new QueryCommand(params))
+        const result = await this.docClient.send(new QueryCommand(params))
         const taskExecutionRecords: TaskExecutionRecord[] = result.Items as TaskExecutionRecord[] || []
         
         return TaskExecutionMapper.toDomains(taskExecutionRecords)
     }
 
     async getTimelineByAccountId(accountId: string, pagination: PaginationDTO): Promise<TaskExecution[]> {
-        const tableName = process.env.TASK_EXECUTION_TABLE
+
         console.log(`Fetching task execution timeline for accountId: ${accountId} with pagination: ${JSON.stringify(pagination)}`)
         
         const params = {
-            TableName: tableName,
+            TableName: this.tableName,
             IndexName: "accountTimelineGSI",
             KeyConditionExpression: "accountId = :accountId",
             ExpressionAttributeValues: {
@@ -101,14 +102,13 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
             console.warn("Pagination beyond first page not fully implemented for DynamoDB")
         }
 
-        const result = await ddbDocClient.send(new QueryCommand(params))
+        const result = await this.docClient.send(new QueryCommand(params))
         const taskExecutionRecords: TaskExecutionRecord[] = result.Items as TaskExecutionRecord[] || []
         
         return TaskExecutionMapper.toDomains(taskExecutionRecords)
     }
 
     async getHeatmap(accountId: string, timeRange: TimeRangeDTO): Promise<HeatmapDTO[]> {
-        const tableName = process.env.TASK_EXECUTION_TABLE
         console.log(`Searching for heatmap data for accountId: ${accountId}, startDate: ${timeRange.startDate}, endDate: ${timeRange.endDate}`)
         
         const startDate = new Date(timeRange.startDate)
@@ -116,7 +116,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
         
         // Query DynamoDB for executions in the date range
         const params = {
-            TableName: tableName,
+            TableName: this.tableName,
             IndexName: "accountTimelineGSI",
             KeyConditionExpression: "accountId = :accountId AND occurredAt BETWEEN :startDate AND :endDate",
             ExpressionAttributeValues: {
@@ -126,7 +126,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
             },
         }
 
-        const result = await ddbDocClient.send(new QueryCommand(params))
+        const result = await this.docClient.send(new QueryCommand(params))
         const taskExecutionRecords: TaskExecutionRecord[] = result.Items as TaskExecutionRecord[] || []
 
         // Group by date and count runs per day

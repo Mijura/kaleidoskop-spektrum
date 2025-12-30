@@ -1,4 +1,5 @@
 import { HeatmapDTO } from "@application/dto/heatmap"
+import { TimeRangeDTO } from "@application/dto/time-range"
 import { GetExecutionHeatmap } from "@application/ports/use-cases/get-execution-heatmap"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
@@ -18,17 +19,17 @@ export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: Get
             if (!accountId || !startDate || !endDate) {
                 throw new ValidationError("Missing required query param")
             }
-    
-            try {
-                const heatmap: HeatmapDTO[] = await getExecutionHeatmapUseCase.execute(accountId, { startDate, endDate })
-                return Responses._200(heatmap)
-            } catch (error) {
-                // TODO: Handle Project Not Found
-                console.error("Error fetching heatmap:", error)
-                throw new Error(`Error fetching heatmap.`)
+
+            const timeRange: TimeRangeDTO = {
+                startDate: new Date(startDate).toISOString(),
+                endDate: new Date(endDate).toISOString()
             }
+
+            const heatmap: HeatmapDTO[] = await getExecutionHeatmapUseCase.execute(accountId, timeRange)
+            return Responses._200(heatmap)
     
         } catch (error) {
+            console.error("Error fetching heatmap:", error)
             return errorHandler(error)
         }
     }

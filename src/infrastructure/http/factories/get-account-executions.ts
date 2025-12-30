@@ -1,3 +1,4 @@
+import { PaginationDTO } from "@application/dto/pagination"
 import { TaskExecutionDTO } from "@application/dto/task-execution"
 import { GetAccountExecutions } from "@application/ports/use-cases/get-account-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
@@ -21,21 +22,16 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
                 throw new ValidationError("Invalid page or size query params")
             }
             
-            const pagination = {
+            const pagination: PaginationDTO = {
                 pageNumber: pageNumber,
                 pageSize: pageSize
             }
     
-            try {
-                const activities: TaskExecutionDTO[] = await getAccountExecutionsUseCase.execute(accountId, pagination)
-                return Responses._200(activities)
-            } catch (error) {
-                // TODO: Handle Project Not Found
-                console.error("Error fetching project timeline:", error)
-                throw new Error(`Error fetching project timeline.`)
-            }
+            const activities: TaskExecutionDTO[] = await getAccountExecutionsUseCase.execute(accountId, pagination)
+            return Responses._200(activities)
     
         } catch (error) {
+            console.error("Error fetching account timeline:", error)
             return errorHandler(error)
         }
     }
