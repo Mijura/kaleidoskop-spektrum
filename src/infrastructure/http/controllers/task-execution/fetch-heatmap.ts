@@ -1,4 +1,4 @@
-import { TaskExecutionHeatmap } from "@domain/task-execution-status"
+import { HeatmapDTO } from "@application/dto/heatmap"
 import { fetchTaskExecutionsHeatmap } from "@infrastructure/dependencies"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
@@ -17,7 +17,7 @@ export async function fetchHeatmapHandler( event: APIGatewayProxyEvent): Promise
         }
 
         try {
-            const heatmap: TaskExecutionHeatmap[] = await fetchTaskExecutionsHeatmap.execute(accountId, { startDate, endDate })
+            const heatmap: HeatmapDTO[] = await fetchTaskExecutionsHeatmap.execute(accountId, { startDate, endDate })
             return Responses._200(heatmap)
 		} catch (error) {
 			// TODO: Handle Project Not Found

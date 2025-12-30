@@ -1,4 +1,4 @@
-import { TaskExecution } from "@domain/task-execution"
+import { TaskExecutionDTO } from "@application/dto/task-execution"
 import { fetchTimelineByAccountId } from "@infrastructure/dependencies"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
@@ -25,7 +25,7 @@ export async function fetchAccountTimelineHandler(event: APIGatewayProxyEvent): 
         }
 
         try {
-            const activities: TaskExecution[] = await fetchTimelineByAccountId.execute(accountId, pagination)
+            const activities: TaskExecutionDTO[] = await fetchTimelineByAccountId.execute(accountId, pagination)
             return Responses._200(activities)
 		} catch (error) {
 			// TODO: Handle Project Not Found
