@@ -5,7 +5,7 @@ import { TaskExecutionRepository } from "@application/ports/repositories/task-ex
 import { FetchTaskExecutionsHeatmapUseCase } from "@application/use-cases/fetch-heatmap"
 import { FetchTimelineByProjectIdUseCase } from "@application/use-cases/fetch-project-timeline"
 import { FetchTimelineByAccountIdUseCase } from "@application/use-cases/fetch-account-timeline"
-import { DynamoDBTaskExecutionRepository } from "@infrastructure/adapters/repositories/dynamodb-task-execution-repository"
+import { DynamoDBTaskExecutionRepository } from "@infrastructure/repositories/dynamodb-task-execution-repository"
 
 export const taskExecutionRepository: TaskExecutionRepository = new DynamoDBTaskExecutionRepository()
 
