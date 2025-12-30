@@ -6,10 +6,10 @@ Transform:
 
 Resources:
 
-  FetchProjectTimelineFunction:
+  GetProjectExecutionsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/infrastructure/http/controllers/task-execution/fetch-project-timeline.fetchProjectTimelineHandler
+      Handler: src/infrastructure/http/handlers/get-project-executions.handler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -32,12 +32,12 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - src/infrastructure/http/controllers/task-execution/fetch-project-timeline.ts
+          - src/infrastructure/http/handlers/get-project-executions.ts
 
-  FetchAccountTimelineFunction:
+  GetAccountExecutionsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/infrastructure/http/controllers/task-execution/fetch-account-timeline.fetchAccountTimelineHandler
+      Handler: src/infrastructure/http/handlers/get-account-executions.handler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -60,12 +60,12 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - src/infrastructure/http/controllers/task-execution/fetch-account-timeline.ts
+          - src/infrastructure/http/handlers/get-account-executions.ts
 
-  FetchHeatmapFunction:
+  GetExecutionHeatmapFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/infrastructure/http/controllers/task-execution/fetch-heatmap.fetchHeatmapHandler
+      Handler: src/infrastructure/http/handlers/get-execution-heatmap.handler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -88,7 +88,7 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - src/infrastructure/http/controllers/task-execution/fetch-heatmap.ts
+          - src/infrastructure/http/handlers/get-execution-heatmap.ts
   
   TaskExecutionTable:
     Type: AWS::DynamoDB::Table
