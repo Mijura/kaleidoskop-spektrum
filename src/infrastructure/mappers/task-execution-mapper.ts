@@ -1,4 +1,4 @@
-import { TaskExecutionHeatmap } from "@application/dto/task-execution"
+import { HeatmapDTO } from "@application/dto/heatmap"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionRecord } from "@infrastructure/records/task-execution"
 
@@ -56,7 +56,7 @@ export class TaskExecutionMapper {
       }
     
     // Parses OpenSearch histogram response
-    static parseHistogram(response: OpenSearchHeatmapResponse): TaskExecutionHeatmap[] {
+    static parseHistogram(response: OpenSearchHeatmapResponse): HeatmapDTO[] {
         return response?.aggregations?.activities_per_day?.buckets.map(bucket => ({
 			date: TaskExecutionMapper.formatDate(bucket.key),
 			runCount: bucket.doc_count,

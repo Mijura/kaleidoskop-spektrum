@@ -5,6 +5,7 @@ import { EmitNewTaskExecution } from "@domain/events/emmiters/new-task-execution
 import { EmitTaskExecutionUpdate } from "@domain/events/emmiters/task-execution-update"
 
 export class TaskExecution {
+    
     public readonly id: string
     public title: string
     public readonly projectId: string

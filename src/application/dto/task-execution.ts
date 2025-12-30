@@ -1,19 +1,12 @@
-export type TimeRangeData = {
-    startDate: string
-    endDate: string
-}
+import { TaskExecutionStatus } from "@domain/task-execution-status"
 
-export type TaskExecutionHeatmap = {
-    date: string
-    runCount: number
-}
-
-export type PaginationData = {
-    pageNumber: number
-    pageSize: number
-}
-
-export const DefaultPagination: PaginationData = {
-    pageNumber: 1,
-    pageSize: 5,
+export type TaskExecutionDTO = {
+    id: string
+    title: string
+    projectId: string
+    taskId: string
+    accountId: string
+    status: TaskExecutionStatus
+    occurredAt: string
+    error?: string
 }

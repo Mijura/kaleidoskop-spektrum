@@ -1,6 +1,6 @@
-import { TaskExecution } from "@domain/task-execution"
-import { PaginationData } from "@domain/task-execution-status"
+import { PaginationDTO } from "@application/dto/pagination"
+import { TaskExecutionDTO } from "@application/dto/task-execution"
 
 export interface FetchTaskExecutionsTimeline {
-    execute(projectId: string, pagination: PaginationData): Promise<TaskExecution[]>
+    execute(projectId: string, pagination: PaginationDTO): Promise<TaskExecutionDTO[]>
 }
