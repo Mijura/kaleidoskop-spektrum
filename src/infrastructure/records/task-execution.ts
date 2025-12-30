@@ -1,4 +1,4 @@
-import { TaskExecutionStatus } from "@domain/value-objects/task-execution"
+import { TaskExecutionStatus } from "@domain/task-execution-status"
 
 export interface TaskExecutionRecord {
     id: string

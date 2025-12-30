@@ -1,8 +1,8 @@
 import { TaskExecutionRepository } from "@domain/ports/repositories/task-execution-repository"
-import { FetchTaskExecutionsHeatmap } from "@domain/use-cases/fetch-heatmap"
-import { TimeRangeData, TaskExecutionHeatmap } from "@domain/value-objects/task-execution"
+import { FetchTaskExecutionsHeatmap } from "@application/ports/use-cases/fetch-heatmap"
+import { TaskExecutionHeatmap, TimeRangeData } from "@application/dto/task-execution"
 
-export class FetchTaskExecutionsHeatmapUseCase implements FetchTaskExecutionsHeatmap{
+export class FetchTaskExecutionsHeatmapUseCase implements FetchTaskExecutionsHeatmap {
 
     constructor(private readonly taskExecutionRepository: TaskExecutionRepository) {}
 

@@ -1,7 +1,7 @@
-import { TaskExecution } from "@domain/entities/task-execution"
+import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionRepository } from "@domain/ports/repositories/task-execution-repository"
 import { PaginationData } from "@domain/value-objects/activity"
-import { TimeRangeData, TaskExecutionHeatmap } from "@domain/value-objects/task-execution"
+import { TimeRangeData, TaskExecutionHeatmap } from "@domain/task-execution-status"
 
 export class MockTaskExecutionRepository implements TaskExecutionRepository {
     private taskExecutions: Map<string, TaskExecution> = new Map()

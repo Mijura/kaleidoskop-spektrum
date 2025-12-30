@@ -1,4 +1,4 @@
-import { TaskExecutionHeatmap } from "@domain/value-objects/task-execution"
+import { TaskExecutionHeatmap } from "@domain/task-execution-status"
 import { fetchTaskExecutionsHeatmap } from "@infrastructure/dependencies"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"

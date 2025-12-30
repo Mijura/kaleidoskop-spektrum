@@ -1,4 +1,4 @@
-import { TaskExecution } from "@domain/entities/task-execution"
+import { TaskExecution } from "@domain/task-execution"
 import { fetchTimelineByProjectId } from "@infrastructure/dependencies"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"

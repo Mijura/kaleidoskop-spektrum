@@ -1,6 +1,6 @@
 
-import { FetchTaskExecutionsHeatmap } from "@domain/use-cases/fetch-heatmap"
-import { FetchTaskExecutionsTimeline } from "@domain/use-cases/fetch-timeline"
+import { FetchTaskExecutionsHeatmap } from "@application/ports/use-cases/fetch-heatmap"
+import { FetchTaskExecutionsTimeline } from "@application/ports/use-cases/fetch-timeline"
 import { TaskExecutionRepository } from "@domain/ports/repositories/task-execution-repository"
 import { FetchTaskExecutionsHeatmapUseCase } from "@application/use-cases/fetch-heatmap"
 import { FetchTimelineByProjectIdUseCase } from "@application/use-cases/fetch-project-timeline"

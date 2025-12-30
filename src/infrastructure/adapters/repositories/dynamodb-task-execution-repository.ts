@@ -1,9 +1,9 @@
 import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb"
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
-import { TaskExecution } from "@domain/entities/task-execution"
+import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionRepository } from "@domain/ports/repositories/task-execution-repository"
 
-import { TimeRangeData, TaskExecutionHeatmap, PaginationData } from "@domain/value-objects/task-execution"
+import { TimeRangeData, TaskExecutionHeatmap, PaginationData } from "@domain/task-execution-status"
 import { TaskExecutionMapper } from "@infrastructure/mappers/task-execution-mapper"
 import { TaskExecutionRecord } from "@infrastructure/records/task-execution"
 

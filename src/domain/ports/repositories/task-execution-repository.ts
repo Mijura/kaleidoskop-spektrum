@@ -1,5 +1,5 @@
-import { TaskExecution } from "@domain/entities/task-execution"
-import { PaginationData, TaskExecutionHeatmap, TimeRangeData } from "@domain/value-objects/task-execution"
+import { TaskExecution } from "@domain/task-execution"
+import { PaginationData, TaskExecutionHeatmap, TimeRangeData } from "@domain/task-execution-status"
 
 
 export interface TaskExecutionRepository {

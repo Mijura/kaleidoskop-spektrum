@@ -1,6 +1,6 @@
 
 import { v4 as uuidv4 } from "uuid"
-import { TaskExecutionStatus } from "@domain/value-objects/task-execution"
+import { TaskExecutionStatus } from "@domain/task-execution-status"
 import { EmitNewTaskExecution } from "@domain/events/emmiters/new-task-execution"
 import { EmitTaskExecutionUpdate } from "@domain/events/emmiters/task-execution-update"
 
