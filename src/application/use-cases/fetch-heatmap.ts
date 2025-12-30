@@ -9,7 +9,6 @@ export class FetchTaskExecutionsHeatmapUseCase implements FetchTaskExecutionsHea
 
 
     execute(accountId: string, timeRange: TimeRangeDTO): Promise<HeatmapDTO[]> {
-        
         return this.taskExecutionRepository.getHeatmap(accountId, timeRange)
     }
 

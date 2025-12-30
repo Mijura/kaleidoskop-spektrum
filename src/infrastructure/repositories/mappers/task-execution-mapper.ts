@@ -1,6 +1,6 @@
 import { HeatmapDTO } from "@application/dto/heatmap"
 import { TaskExecution } from "@domain/task-execution"
-import { TaskExecutionRecord } from "@infrastructure/records/task-execution"
+import { TaskExecutionRecord } from "@infrastructure/repositories/records/task-execution"
 
 export type HeatmapBucket = {
     key_as_string: string // ISO date string

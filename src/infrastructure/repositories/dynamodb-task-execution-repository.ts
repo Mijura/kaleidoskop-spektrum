@@ -5,8 +5,8 @@ import { TaskExecutionRepository } from "@application/ports/repositories/task-ex
 import { PaginationDTO } from "@application/dto/pagination"
 import { TimeRangeDTO } from "@application/dto/time-range"
 import { HeatmapDTO } from "@application/dto/heatmap"
-import { TaskExecutionMapper } from "@infrastructure/mappers/task-execution-mapper"
-import { TaskExecutionRecord } from "@infrastructure/records/task-execution"
+import { TaskExecutionMapper } from "@infrastructure/repositories/mappers/task-execution-mapper"
+import { TaskExecutionRecord } from "@infrastructure/repositories/records/task-execution"
 
 const client = new DynamoDBClient({
     region: process.env.AWS_REGION,
