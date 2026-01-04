@@ -6,11 +6,13 @@ import { TaskExecutionDTO } from "@application/dto/task-execution"
 import { TaskExecutionMapper } from "@application/mappers/task-execution"
 
 export class GetProjectExecutionsUseCase implements GetProjectExecutions {
+	constructor(private readonly taskExecutionRepository: TaskExecutionRepository) {}
 
-    constructor(private readonly taskExecutionRepository: TaskExecutionRepository) {}
-
-    async execute(projectId: string, pagination: PaginationDTO): Promise<TaskExecutionDTO[]> {
-        const taskExecutions: TaskExecution[] = await this.taskExecutionRepository.getTimelineByProjectId(projectId, pagination)
-        return TaskExecutionMapper.toDTOs(taskExecutions)
-    }
+	async execute(projectId: string, pagination: PaginationDTO): Promise<TaskExecutionDTO[]> {
+		const taskExecutions: TaskExecution[] = await this.taskExecutionRepository.getTimelineByProjectId(
+			projectId,
+			pagination,
+		)
+		return TaskExecutionMapper.toDTOs(taskExecutions)
+	}
 }

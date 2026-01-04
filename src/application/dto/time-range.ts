@@ -1,4 +1,4 @@
 export type TimeRangeDTO = {
-    startDate: string
-    endDate: string
+	startDate: string
+	endDate: string
 }

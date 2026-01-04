@@ -10,6 +10,10 @@ import { GetExecutionHeatmapUseCase } from "@application/use-cases/get-execution
 export const taskExecutionRepository: TaskExecutionRepository = new DynamoDBTaskExecutionRepository()
 
 // Use Cases
-export const getProjectExecutionsUseCase: GetProjectExecutions = new GetProjectExecutionsUseCase(taskExecutionRepository)
-export const getAccountExecutionsUseCase: GetAccountExecutions = new GetAccountExecutionsUseCase(taskExecutionRepository)
+export const getProjectExecutionsUseCase: GetProjectExecutions = new GetProjectExecutionsUseCase(
+	taskExecutionRepository,
+)
+export const getAccountExecutionsUseCase: GetAccountExecutions = new GetAccountExecutionsUseCase(
+	taskExecutionRepository,
+)
 export const getExecutionHeatmapUseCase: GetExecutionHeatmap = new GetExecutionHeatmapUseCase(taskExecutionRepository)
