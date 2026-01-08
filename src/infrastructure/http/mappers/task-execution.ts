@@ -1,4 +1,4 @@
-import { TaskExecutionDTO } from "@application/dto/task-execution"
+import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
 import { TaskExecution } from "@domain/task-execution"
 
 export class TaskExecutionMapper {

@@ -2,11 +2,11 @@ import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand } from "@a
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
-import { PaginationDTO } from "@application/dto/pagination"
-import { TimeRangeDTO } from "@application/dto/time-range"
-import { HeatmapDTO } from "@application/dto/heatmap"
 import { TaskExecutionMapper } from "@infrastructure/repositories/mappers/task-execution-mapper"
 import { TaskExecutionRecord } from "@infrastructure/repositories/records/task-execution"
+import { Pagination } from "@application/value-objects/pagination"
+import { TimeRange } from "@application/value-objects/time-range"
+import { Heatmap } from "@application/value-objects/heatmap"
 
 export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository {
 	private readonly docClient: DynamoDBDocumentClient
@@ -53,7 +53,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 		return TaskExecutionMapper.toDomain(taskExecutionRecord)
 	}
 
-	async getTimelineByProjectId(projectId: string, pagination: PaginationDTO): Promise<TaskExecution[]> {
+	async getTimelineByProjectId(projectId: string, pagination: Pagination): Promise<TaskExecution[]> {
 		console.log(
 			`Fetching task execution timeline for projectId: ${projectId} with pagination: ${JSON.stringify(pagination)}`,
 		)
@@ -82,7 +82,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 		return TaskExecutionMapper.toDomains(taskExecutionRecords)
 	}
 
-	async getTimelineByAccountId(accountId: string, pagination: PaginationDTO): Promise<TaskExecution[]> {
+	async getTimelineByAccountId(accountId: string, pagination: Pagination): Promise<TaskExecution[]> {
 		console.log(
 			`Fetching task execution timeline for accountId: ${accountId} with pagination: ${JSON.stringify(pagination)}`,
 		)
@@ -111,7 +111,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 		return TaskExecutionMapper.toDomains(taskExecutionRecords)
 	}
 
-	async getHeatmap(accountId: string, timeRange: TimeRangeDTO): Promise<HeatmapDTO[]> {
+	async getHeatmap(accountId: string, timeRange: TimeRange): Promise<Heatmap[]> {
 		console.log(
 			`Searching for heatmap data for accountId: ${accountId}, startDate: ${timeRange.startDate}, endDate: ${timeRange.endDate}`,
 		)
@@ -153,7 +153,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 		})
 
 		// Convert to TaskExecutionHeatmap format
-		const heatmap: HeatmapDTO[] = Array.from(runsByDate.entries())
+		const heatmap: Heatmap[] = Array.from(runsByDate.entries())
 			.map(([date, runCount]) => ({
 				date,
 				runCount,

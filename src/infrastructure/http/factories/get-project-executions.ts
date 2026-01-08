@@ -1,8 +1,10 @@
-import { PaginationDTO } from "@application/dto/pagination"
-import { TaskExecutionDTO } from "@application/dto/task-execution"
+import { Pagination } from "@application/value-objects/pagination"
+import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
 import { GetProjectExecutions } from "@application/ports/use-cases/get-project-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
+import { TaskExecution } from "@domain/task-execution"
+import { TaskExecutionMapper } from "../mappers/task-execution"
 
 export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: GetProjectExecutions) {
 	return async function getProjectExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
@@ -21,13 +23,14 @@ export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: G
 				throw new ValidationError("Invalid page or size query params")
 			}
 
-			const pagination: PaginationDTO = {
+			const pagination: Pagination = {
 				pageNumber: pageNumber,
 				pageSize: pageSize,
 			}
 
-			const activities: TaskExecutionDTO[] = await getProjectExecutionsUseCase.execute(projectId, pagination)
-			return Responses._200(activities)
+			const taskExecutions: TaskExecution[] = await getProjectExecutionsUseCase.execute(projectId, pagination)
+            const taskExecutionDTOs: TaskExecutionDTO[] = TaskExecutionMapper.toDTOs(taskExecutions)
+			return Responses._200(taskExecutionDTOs)
 		} catch (error) {
 			console.error("Error fetching project timeline:", error)
 			return errorHandler(error)

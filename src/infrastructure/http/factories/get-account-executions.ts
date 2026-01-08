@@ -1,8 +1,10 @@
-import { PaginationDTO } from "@application/dto/pagination"
-import { TaskExecutionDTO } from "@application/dto/task-execution"
+import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
 import { GetAccountExecutions } from "@application/ports/use-cases/get-account-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
+import { TaskExecution } from "@domain/task-execution"
+import { TaskExecutionMapper } from "../mappers/task-execution"
+import { Pagination } from "@application/value-objects/pagination"
 
 export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutions) {
 	return async function getAccountExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
@@ -21,13 +23,14 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
 				throw new ValidationError("Invalid page or size query params")
 			}
 
-			const pagination: PaginationDTO = {
+			const pagination: Pagination = {
 				pageNumber: pageNumber,
 				pageSize: pageSize,
 			}
 
-			const activities: TaskExecutionDTO[] = await getAccountExecutionsUseCase.execute(accountId, pagination)
-			return Responses._200(activities)
+			const taskExecutions: TaskExecution[] = await getAccountExecutionsUseCase.execute(accountId, pagination)
+            const taskExecutionDTOs: TaskExecutionDTO[] = TaskExecutionMapper.toDTOs(taskExecutions)
+			return Responses._200(taskExecutionDTOs)
 		} catch (error) {
 			console.error("Error fetching account timeline:", error)
 			return errorHandler(error)
