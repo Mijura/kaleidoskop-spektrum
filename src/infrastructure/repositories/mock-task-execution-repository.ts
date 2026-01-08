@@ -1,9 +1,8 @@
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
-import { PaginationDTO } from "@application/dto/pagination"
-import { TimeRangeDTO } from "@application/dto/time-range"
-import { HeatmapDTO } from "@application/dto/heatmap"
-
+import { Pagination } from "@application/value-objects/pagination"
+import { TimeRange } from "@application/value-objects/time-range"
+import { Heatmap } from "@application/value-objects/heatmap"
 export class MockTaskExecutionRepository implements TaskExecutionRepository {
 	private taskExecutions: Map<string, TaskExecution> = new Map()
 
@@ -28,7 +27,7 @@ export class MockTaskExecutionRepository implements TaskExecutionRepository {
 		return taskExecution || null
 	}
 
-	async getTimelineByProjectId(projectId: string, pagination: PaginationDTO): Promise<TaskExecution[]> {
+	async getTimelineByProjectId(projectId: string, pagination: Pagination): Promise<TaskExecution[]> {
 		console.log(
 			`Mock: Fetching task execution timeline for projectId: ${projectId} with pagination: ${JSON.stringify(pagination)}`,
 		)
@@ -45,7 +44,7 @@ export class MockTaskExecutionRepository implements TaskExecutionRepository {
 		return projectTaskExecutions.slice(from, to)
 	}
 
-	async getTimelineByAccountId(accountId: string, pagination: PaginationDTO): Promise<TaskExecution[]> {
+	async getTimelineByAccountId(accountId: string, pagination: Pagination): Promise<TaskExecution[]> {
 		console.log(
 			`Mock: Fetching task execution timeline for accountId: ${accountId} with pagination: ${JSON.stringify(pagination)}`,
 		)
@@ -62,7 +61,7 @@ export class MockTaskExecutionRepository implements TaskExecutionRepository {
 		return accountTaskExecutions.slice(from, to)
 	}
 
-	async getHeatmap(accountId: string, timeRange: TimeRangeDTO): Promise<HeatmapDTO[]> {
+	async getHeatmap(accountId: string, timeRange: TimeRange): Promise<Heatmap[]> {
 		console.log(
 			`Mock: Searching for heatmap data for accountId: ${accountId}, startDate: ${timeRange.startDate}, endDate: ${timeRange.endDate}`,
 		)
@@ -96,8 +95,8 @@ export class MockTaskExecutionRepository implements TaskExecutionRepository {
 			runsByDate.set(dateKey, currentCount + 1)
 		})
 
-		// Convert to HeatmapDTO format
-		const heatmap: HeatmapDTO[] = Array.from(runsByDate.entries())
+		// Convert to Heatmap format
+		const heatmap: Heatmap[] = Array.from(runsByDate.entries())
 			.map(([date, runCount]) => ({
 				date,
 				runCount,

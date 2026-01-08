@@ -1,6 +1,6 @@
-import { PaginationDTO } from "@application/dto/pagination"
-import { TaskExecutionDTO } from "@application/dto/task-execution"
+import { Pagination } from "@application/value-objects/pagination"
+import { TaskExecution } from "@domain/task-execution"
 
 export interface GetProjectExecutions {
-	execute(projectId: string, pagination: PaginationDTO): Promise<TaskExecutionDTO[]>
+	execute(projectId: string, pagination: Pagination): Promise<TaskExecution[]>
 }

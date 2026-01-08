@@ -1,6 +1,6 @@
-import { TimeRangeDTO } from "@application/dto/time-range"
-import { HeatmapDTO } from "@application/dto/heatmap"
+import { Heatmap } from "@application/value-objects/heatmap"
+import { TimeRange } from "@application/value-objects/time-range"
 
 export interface GetExecutionHeatmap {
-	execute(accountId: string, timeRange: TimeRangeDTO): Promise<HeatmapDTO[]>
+	execute(accountId: string, timeRange: TimeRange): Promise<Heatmap[]>
 }
