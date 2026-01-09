@@ -9,15 +9,15 @@ import { TaskExecutionMapper } from "../mappers/task-execution"
 export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: GetProjectExecutions) {
 	return async function getProjectExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
-			const qs = event.queryStringParameters || {}
 
-			const projectId = qs.projectId
+            const projectId = event.pathParameters?.projectId
+			if (!projectId) {
+				throw new ValidationError("Missing required path param: projectId")
+			}
+
+            const qs = event.queryStringParameters || {}
 			const pageNumber = qs.page ? parseInt(qs.page, 10) : 1
 			const pageSize = qs.size ? parseInt(qs.size, 10) : 25
-
-			if (!projectId) {
-				throw new ValidationError("Missing required query param: projectId")
-			}
 
 			if (Number.isNaN(pageNumber) || Number.isNaN(pageSize)) {
 				throw new ValidationError("Invalid page or size query params")

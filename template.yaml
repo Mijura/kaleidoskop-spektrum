@@ -23,7 +23,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /task-execution/project/timeline
+            Path: /task-execution/project/{projectId}
             Method: GET
     Metadata:
       BuildMethod: esbuild
@@ -51,7 +51,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /task-execution/account/timeline
+            Path: /task-execution/account/{accountId}
             Method: GET
     Metadata:
       BuildMethod: esbuild
@@ -79,7 +79,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /task-execution/heatmap
+            Path: /task-execution/heatmap/account/{accountId}
             Method: GET
     Metadata:
       BuildMethod: esbuild
