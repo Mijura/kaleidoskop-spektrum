@@ -7,13 +7,17 @@ import { Heatmap } from "@application/value-objects/heatmap"
 export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: GetExecutionHeatmap) {
 	return async function getExecutionHeatmapHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
-			const qs = event.queryStringParameters || {}
 
-			const accountId = qs.accountId
+            const accountId = event.pathParameters?.accountId
+			if (!accountId) {
+				throw new ValidationError("Missing required path param: accountId")
+			}
+
+            const qs = event.queryStringParameters || {}
 			const startDate = qs.startDate
 			const endDate = qs.endDate
 
-			if (!accountId || !startDate || !endDate) {
+			if (!startDate || !endDate) {
 				throw new ValidationError("Missing required query param")
 			}
 

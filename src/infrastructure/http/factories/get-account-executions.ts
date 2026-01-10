@@ -9,9 +9,14 @@ import { Pagination } from "@application/value-objects/pagination"
 export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutions) {
 	return async function getAccountExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
+
+            const accountId = event.pathParameters?.accountId
+			if (!accountId) {
+				throw new ValidationError("Missing required path param: accountId")
+			}
+
 			const qs = event.queryStringParameters || {}
 
-			const accountId = qs.accountId
 			const pageNumber = qs.page ? parseInt(qs.page, 10) : 1
 			const pageSize = qs.size ? parseInt(qs.size, 10) : 25
 

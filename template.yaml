@@ -1,11 +1,17 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   observability
 Transform:
-- AWS::Serverless-2016-10-31
+  - AWS::Serverless-2016-10-31
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+      AllowHeaders: "'content-type'"
+      AllowOrigin: "'*'"
 
 Resources:
-
   GetProjectExecutionsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -23,7 +29,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /task-execution/project/timeline
+            Path: /task-execution/project/{projectId}
             Method: GET
     Metadata:
       BuildMethod: esbuild
@@ -51,7 +57,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /task-execution/account/timeline
+            Path: /task-execution/account/{accountId}
             Method: GET
     Metadata:
       BuildMethod: esbuild
@@ -79,7 +85,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /task-execution/heatmap
+            Path: /task-execution/heatmap/account/{accountId}
             Method: GET
     Metadata:
       BuildMethod: esbuild
@@ -89,7 +95,91 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - src/infrastructure/http/handlers/get-execution-heatmap.ts
-  
+
+  StartTaskExecutionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/infrastructure/http/handlers/start-task-execution.handler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Start a new task execution
+      Environment:
+        Variables:
+          TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /task-execution/started
+            Method: POST
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - src/infrastructure/http/handlers/start-task-execution.ts
+
+  FinishExecutionWithoutErrorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/infrastructure/http/handlers/finish-execution-without-error.handler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Finish a task execution without error
+      Environment:
+        Variables:
+          TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /task-execution/finished
+            Method: POST
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - src/infrastructure/http/handlers/finish-execution-without-error.ts
+
+  FinishExecutionWithErrorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/infrastructure/http/handlers/finish-execution-with-error.handler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Finish a task execution with error
+      Environment:
+        Variables:
+          TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /task-execution/finished-with-error
+            Method: POST
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - src/infrastructure/http/handlers/finish-execution-with-error.ts
+
   TaskExecutionTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -124,12 +214,8 @@ Resources:
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
+
 Outputs:
   WebEndpoint:
     Description: API Gateway endpoint URL for Prod stage
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
-Globals:
-  Function:
-    LoggingConfig:
-      LogFormat: JSON
