@@ -1,5 +1,8 @@
 node_modules
+coverage
+
 .npmrc
 .aws-sam
 
 env.json
+.env.test
