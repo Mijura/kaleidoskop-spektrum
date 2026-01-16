@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach } from "@rstest/core"
-import { FinishExecutionWithoutErrorUseCase } from "@application/use-cases/finish-execution-without-error"
+import { FinishExecutionWithoutError } from "@application/use-cases/finish-execution-without-error"
 import { InMemoryTaskExecutionRepository } from "@application/test/mocks/in-memory-task-execution-repository"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionStatus } from "@domain/task-execution-status"
 
 describe("Finish Execution Without Error", () => {
-	let finishExecutionWithoutErrorUseCase: FinishExecutionWithoutErrorUseCase
+	let finishExecutionWithoutErrorUseCase: FinishExecutionWithoutError
 	let repository: TaskExecutionRepository
 
 	beforeEach(() => {
 		repository = new InMemoryTaskExecutionRepository()
-		finishExecutionWithoutErrorUseCase = new FinishExecutionWithoutErrorUseCase(repository)
+		finishExecutionWithoutErrorUseCase = new FinishExecutionWithoutError(repository)
 	})
 
 	it("should successfully finish execution without error", async () => {

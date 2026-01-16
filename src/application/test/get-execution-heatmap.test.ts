@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach } from "@rstest/core"
-import { GetExecutionHeatmapUseCase } from "@application/use-cases/get-execution-heatmap"
+import { GetExecutionHeatmap } from "@application/use-cases/get-execution-heatmap"
 import { InMemoryTaskExecutionRepository } from "@application/test/mocks/in-memory-task-execution-repository"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
 import { TaskExecution } from "@domain/task-execution"
 import { TimeRange } from "@application/value-objects/time-range"
 
 describe("Get Execution Heatmap", () => {
-	let getExecutionHeatmapUseCase: GetExecutionHeatmapUseCase
+	let getExecutionHeatmapUseCase: GetExecutionHeatmap
 	let repository: TaskExecutionRepository
 
 	beforeEach(() => {
 		repository = new InMemoryTaskExecutionRepository()
-		getExecutionHeatmapUseCase = new GetExecutionHeatmapUseCase(repository)
+		getExecutionHeatmapUseCase = new GetExecutionHeatmap(repository)
 	})
 
 	it("should return heatmap data for account executions within time range", async () => {

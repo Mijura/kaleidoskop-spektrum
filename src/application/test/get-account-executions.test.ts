@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach } from "@rstest/core"
-import { GetAccountExecutionsUseCase } from "@application/use-cases/get-account-executions"
+import { GetAccountExecutions } from "@application/use-cases/get-account-executions"
 import { InMemoryTaskExecutionRepository } from "@application/test/mocks/in-memory-task-execution-repository"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
 import { TaskExecution } from "@domain/task-execution"
 import { Pagination } from "@application/value-objects/pagination"
 
 describe("Get Account Executions", () => {
-	let getAccountExecutionsUseCase: GetAccountExecutionsUseCase
+	let getAccountExecutionsUseCase: GetAccountExecutions
 	let repository: TaskExecutionRepository
 
 	beforeEach(() => {
 		repository = new InMemoryTaskExecutionRepository()
-		getAccountExecutionsUseCase = new GetAccountExecutionsUseCase(repository)
+		getAccountExecutionsUseCase = new GetAccountExecutions(repository)
 	})
 
 	it("should return task executions for a specific account", async () => {

@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach } from "@rstest/core"
-import { GetProjectExecutionsUseCase } from "@application/use-cases/get-project-executions"
+import { GetProjectExecutions } from "@application/use-cases/get-project-executions"
 import { InMemoryTaskExecutionRepository } from "@application/test/mocks/in-memory-task-execution-repository"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
 import { TaskExecution } from "@domain/task-execution"
 import { Pagination } from "@application/value-objects/pagination"
 
 describe("Get Project Executions", () => {
-	let getProjectExecutionsUseCase: GetProjectExecutionsUseCase
+	let getProjectExecutionsUseCase: GetProjectExecutions
 	let repository: TaskExecutionRepository
 
 	beforeEach(() => {
 		repository = new InMemoryTaskExecutionRepository()
-		getProjectExecutionsUseCase = new GetProjectExecutionsUseCase(repository)
+		getProjectExecutionsUseCase = new GetProjectExecutions(repository)
 	})
 
 	it("should return task executions for a specific project", async () => {

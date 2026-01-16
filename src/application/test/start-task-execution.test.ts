@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach } from "@rstest/core"
-import { StartTaskExecutionUseCase } from "@application/use-cases/start-task-execution"
+import { StartTaskExecution } from "@application/use-cases/start-task-execution"
 import { InMemoryTaskExecutionRepository } from "@application/test/mocks/in-memory-task-execution-repository"
 import { TaskExecutionRepository } from "@application/ports/repositories/task-execution-repository"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionStatus } from "@domain/task-execution-status"
 
 describe("Start Task Execution", () => {
-	let startTaskExecutionUseCase: StartTaskExecutionUseCase
+	let startTaskExecutionUseCase: StartTaskExecution
 	let repository: TaskExecutionRepository
 
 	beforeEach(() => {
 		repository = new InMemoryTaskExecutionRepository()
-		startTaskExecutionUseCase = new StartTaskExecutionUseCase(repository)
+		startTaskExecutionUseCase = new StartTaskExecution(repository)
 	})
 
 	it("should successfully create a task execution", async () => {
