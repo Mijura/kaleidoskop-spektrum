@@ -20,10 +20,6 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
 			const pageNumber = qs.page ? parseInt(qs.page, 10) : 1
 			const pageSize = qs.size ? parseInt(qs.size, 10) : 25
 
-			if (!accountId) {
-				throw new ValidationError("Missing required query param: projectId")
-			}
-
 			if (Number.isNaN(pageNumber) || Number.isNaN(pageSize)) {
 				throw new ValidationError("Invalid page or size query params")
 			}
