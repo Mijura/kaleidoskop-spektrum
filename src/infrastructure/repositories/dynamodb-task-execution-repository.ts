@@ -8,44 +8,42 @@ import { Pagination } from "@application/value-objects/pagination"
 import { TimeRange } from "@application/value-objects/time-range"
 import { Heatmap } from "@application/value-objects/heatmap"
 
-export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository {
-	private readonly docClient: DynamoDBDocumentClient
-	private readonly tableName: string
+const client = new DynamoDBClient({})
+const docClient = DynamoDBDocumentClient.from(client)
 
-	constructor() {
-		const client = new DynamoDBClient({})
-		this.docClient = DynamoDBDocumentClient.from(client)
-		this.tableName = process.env.TASK_EXECUTION_TABLE || "TaskExecution"
-	}
+export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository {
 
 	async save(taskExecution: TaskExecution): Promise<TaskExecution> {
+
+		const tableName = process.env.TASK_EXECUTION_TABLE
 		if (!taskExecution.id) {
 			throw new Error(
 				"taskExecution.id is required for saving. Missing ID may cause unintended document creation.",
 			)
 		}
-		console.log(`Saving task execution with id: ${taskExecution.id} to DynamoDB table ${this.tableName}`)
+		console.log(`Saving task execution with id: ${taskExecution.id} to DynamoDB table ${tableName}`)
 
 		const taskExecutionRecord: TaskExecutionRecord = TaskExecutionMapper.toRecord(taskExecution)
 
 		const params = {
-			TableName: this.tableName,
+			TableName: tableName,
 			Item: taskExecutionRecord,
 		}
 
-		await this.docClient.send(new PutCommand(params))
+		await docClient.send(new PutCommand(params))
 		return taskExecution
 	}
 
 	async get(taskExecutionId: string): Promise<TaskExecution | null> {
-		console.log(`Fetching task execution by id: ${taskExecutionId} from DynamoDB table ${this.tableName}`)
+		const tableName = process.env.TASK_EXECUTION_TABLE
+		console.log(`Fetching task execution by id: ${taskExecutionId} from DynamoDB table ${tableName}`)
 
 		const params = {
-			TableName: this.tableName,
+			TableName: tableName,
 			Key: { id: taskExecutionId },
 		}
 
-		const { Item: item } = await this.docClient.send(new GetCommand(params))
+		const { Item: item } = await docClient.send(new GetCommand(params))
 
 		if (!item) return null
 
@@ -54,12 +52,14 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 	}
 
 	async getTimelineByProjectId(projectId: string, pagination: Pagination): Promise<TaskExecution[]> {
+
+		const tableName = process.env.TASK_EXECUTION_TABLE
 		console.log(
 			`Fetching task execution timeline for projectId: ${projectId} with pagination: ${JSON.stringify(pagination)}`,
 		)
 
 		const params = {
-			TableName: this.tableName,
+			TableName: tableName,
 			IndexName: "projectTimelineGSI",
 			KeyConditionExpression: "projectId = :projectId",
 			ExpressionAttributeValues: {
@@ -76,19 +76,21 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 			console.warn("Pagination beyond first page not fully implemented for DynamoDB")
 		}
 
-		const result = await this.docClient.send(new QueryCommand(params))
-		const taskExecutionRecords: TaskExecutionRecord[] = (result.Items as TaskExecutionRecord[]) || []
+		const result = await docClient.send(new QueryCommand(params))
+		const taskExecutionRecords: TaskExecutionRecord[] = result.Items as TaskExecutionRecord[]
 
 		return TaskExecutionMapper.toDomains(taskExecutionRecords)
 	}
 
 	async getTimelineByAccountId(accountId: string, pagination: Pagination): Promise<TaskExecution[]> {
+
+		const tableName = process.env.TASK_EXECUTION_TABLE
 		console.log(
 			`Fetching task execution timeline for accountId: ${accountId} with pagination: ${JSON.stringify(pagination)}`,
 		)
 
 		const params = {
-			TableName: this.tableName,
+			TableName: tableName,
 			IndexName: "accountTimelineGSI",
 			KeyConditionExpression: "accountId = :accountId",
 			ExpressionAttributeValues: {
@@ -105,13 +107,16 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 			console.warn("Pagination beyond first page not fully implemented for DynamoDB")
 		}
 
-		const result = await this.docClient.send(new QueryCommand(params))
-		const taskExecutionRecords: TaskExecutionRecord[] = (result.Items as TaskExecutionRecord[]) || []
+		const result = await docClient.send(new QueryCommand(params))
+		const taskExecutionRecords: TaskExecutionRecord[] = result.Items as TaskExecutionRecord[]
 
 		return TaskExecutionMapper.toDomains(taskExecutionRecords)
 	}
 
 	async getHeatmap(accountId: string, timeRange: TimeRange): Promise<Heatmap[]> {
+
+		const tableName = process.env.TASK_EXECUTION_TABLE
+
 		console.log(
 			`Searching for heatmap data for accountId: ${accountId}, startDate: ${timeRange.startDate}, endDate: ${timeRange.endDate}`,
 		)
@@ -121,7 +126,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 
 		// Query DynamoDB for executions in the date range
 		const params = {
-			TableName: this.tableName,
+			TableName: tableName,
 			IndexName: "accountTimelineGSI",
 			KeyConditionExpression: "accountId = :accountId AND occurredAt BETWEEN :startDate AND :endDate",
 			ExpressionAttributeValues: {
@@ -131,8 +136,8 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 			},
 		}
 
-		const result = await this.docClient.send(new QueryCommand(params))
-		const taskExecutionRecords: TaskExecutionRecord[] = (result.Items as TaskExecutionRecord[]) || []
+		const result = await docClient.send(new QueryCommand(params))
+		const taskExecutionRecords: TaskExecutionRecord[] = result.Items as TaskExecutionRecord[]
 
 		// Group by date and count runs per day
 		const runsByDate = new Map<string, number>()
@@ -148,7 +153,7 @@ export class DynamoDBTaskExecutionRepository implements TaskExecutionRepository 
 		// Count actual runs
 		taskExecutionRecords.forEach((execution) => {
 			const dateKey = new Date(execution.occurredAt).toISOString().split("T")[0]
-			const currentCount = runsByDate.get(dateKey) || 0
+			const currentCount = runsByDate.get(dateKey)!
 			runsByDate.set(dateKey, currentCount + 1)
 		})
 
