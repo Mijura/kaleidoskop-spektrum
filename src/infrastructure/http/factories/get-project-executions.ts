@@ -1,12 +1,12 @@
 import { Pagination } from "@application/value-objects/pagination"
 import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
-import { GetProjectExecutions } from "@application/ports/use-cases/get-project-executions"
+import { GetProjectExecutionsUseCase } from "@application/ports/use-cases/get-project-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionMapper } from "../mappers/task-execution"
 
-export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: GetProjectExecutions) {
+export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: GetProjectExecutionsUseCase) {
 	return async function getProjectExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
 

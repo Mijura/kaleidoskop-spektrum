@@ -1,11 +1,11 @@
-import { StartTaskExecution } from "@application/ports/use-cases/start-task-execution"
+import { StartTaskExecutionUseCase } from "@application/ports/use-cases/start-task-execution"
 import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
 import { TaskExecution } from "@domain/task-execution"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TaskExecutionMapper } from "@infrastructure/http/mappers/task-execution"
 
-export function createStartTaskExecutionHandler(startTaskExecutionUseCase: StartTaskExecution) {
+export function createStartTaskExecutionHandler(startTaskExecutionUseCase: StartTaskExecutionUseCase) {
 	return async function startTaskExecutionHandler({ body }: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
 

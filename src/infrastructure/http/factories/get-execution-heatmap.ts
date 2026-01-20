@@ -1,10 +1,10 @@
-import { GetExecutionHeatmap } from "@application/ports/use-cases/get-execution-heatmap"
+import { GetExecutionHeatmapUseCase } from "@application/ports/use-cases/get-execution-heatmap"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TimeRange } from "@application/value-objects/time-range"
 import { Heatmap } from "@application/value-objects/heatmap"
 
-export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: GetExecutionHeatmap) {
+export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: GetExecutionHeatmapUseCase) {
 	return async function getExecutionHeatmapHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
 

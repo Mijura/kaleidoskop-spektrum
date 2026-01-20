@@ -1,8 +1,8 @@
-import { FinishExecutionWithoutError } from "@application/ports/use-cases/finish-execution-without-error"
+import { FinishExecutionWithoutErrorUseCase } from "@application/ports/use-cases/finish-execution-without-error"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 
-export function createFinishExecutionWithoutErrorHandler(finishExecutionWithoutErrorUseCase: FinishExecutionWithoutError) {
+export function createFinishExecutionWithoutErrorHandler(finishExecutionWithoutErrorUseCase: FinishExecutionWithoutErrorUseCase) {
 	return async function finishExecutionWithoutErrorHandler({ body }: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
             if (!body) 

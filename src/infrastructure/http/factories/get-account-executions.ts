@@ -1,12 +1,12 @@
 import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
-import { GetAccountExecutions } from "@application/ports/use-cases/get-account-executions"
+import { GetAccountExecutionsUseCase } from "@application/ports/use-cases/get-account-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionMapper } from "../mappers/task-execution"
 import { Pagination } from "@application/value-objects/pagination"
 
-export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutions) {
+export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutionsUseCase) {
 	return async function getAccountExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
 
