@@ -7,12 +7,12 @@
 		"@aws-sdk/client-dynamodb": "^3.398.0",
 		"@aws-sdk/lib-dynamodb": "^3.398.0",
 		"@jigjoy-io/serverless-core": "^0.0.3",
-		"@types/aws-lambda": "^8.10.158",
 		"uuid": "^13.0.0"
 	},
 	"devDependencies": {
 		"@rstest/core": "^0.7.9",
 		"@rstest/coverage-istanbul": "^0.1.6",
+		"@types/aws-lambda": "^8.10.159",
 		"aws-sdk-client-mock": "^2.0.0",
 		"dotenv": "^17.2.3",
 		"esbuild": "^0.27.0",
