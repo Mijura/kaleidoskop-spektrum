@@ -1,36 +1,27 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   observability
+
 Transform:
   - AWS::Serverless-2016-10-31
 
 Globals:
-  Api:
-    Cors:
-      AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
-      AllowHeaders: "'content-type'"
-      AllowOrigin: "'*'"
+  Function:
+    Runtime: nodejs22.x
+    Architectures:
+      - x86_64
+    MemorySize: 128
+    Timeout: 100
 
 Resources:
   GetProjectExecutionsFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/infrastructure/http/handlers/get-project-executions.handler
-      Runtime: nodejs22.x
-      Architectures:
-        - x86_64
-      MemorySize: 128
-      Timeout: 100
       Description: Fetch project timeline task executions
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /task-execution/project/{projectId}
-            Method: GET
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -44,21 +35,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/infrastructure/http/handlers/get-account-executions.handler
-      Runtime: nodejs22.x
-      Architectures:
-        - x86_64
-      MemorySize: 128
-      Timeout: 100
       Description: Fetch account timeline task executions
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /task-execution/account/{accountId}
-            Method: GET
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -72,21 +52,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/infrastructure/http/handlers/get-execution-heatmap.handler
-      Runtime: nodejs22.x
-      Architectures:
-        - x86_64
-      MemorySize: 128
-      Timeout: 100
       Description: Fetch heatmap of task executions
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /task-execution/heatmap/account/{accountId}
-            Method: GET
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -100,21 +69,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/infrastructure/http/handlers/start-task-execution.handler
-      Runtime: nodejs22.x
-      Architectures:
-        - x86_64
-      MemorySize: 128
-      Timeout: 100
       Description: Start a new task execution
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /task-execution/started
-            Method: POST
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -128,21 +86,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/infrastructure/http/handlers/finish-execution-without-error.handler
-      Runtime: nodejs22.x
-      Architectures:
-        - x86_64
-      MemorySize: 128
-      Timeout: 100
       Description: Finish a task execution without error
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /task-execution/finished
-            Method: POST
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -156,21 +103,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/infrastructure/http/handlers/finish-execution-with-error.handler
-      Runtime: nodejs22.x
-      Architectures:
-        - x86_64
-      MemorySize: 128
-      Timeout: 100
       Description: Finish a task execution with error
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /task-execution/finished-with-error
-            Method: POST
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -216,6 +152,32 @@ Resources:
             ProjectionType: ALL
 
 Outputs:
-  WebEndpoint:
-    Description: API Gateway endpoint URL for Prod stage
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  GetProjectExecutionsFunctionArn:
+    Value: !GetAtt GetProjectExecutionsFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-GetProjectExecutionsFunctionArn"
+
+  GetAccountExecutionsFunctionArn:
+    Value: !GetAtt GetAccountExecutionsFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-GetAccountExecutionsFunctionArn"
+
+  GetExecutionHeatmapFunctionArn:
+    Value: !GetAtt GetExecutionHeatmapFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-GetExecutionHeatmapFunctionArn"
+
+  StartTaskExecutionFunctionArn:
+    Value: !GetAtt StartTaskExecutionFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-StartTaskExecutionFunctionArn"
+
+  FinishExecutionWithoutErrorFunctionArn:
+    Value: !GetAtt FinishExecutionWithoutErrorFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-FinishExecutionWithoutErrorFunctionArn"
+
+  FinishExecutionWithErrorFunctionArn:
+    Value: !GetAtt FinishExecutionWithErrorFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-FinishExecutionWithErrorFunctionArn"
