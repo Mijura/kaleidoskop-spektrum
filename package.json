@@ -21,9 +21,10 @@
 		"swagger-ui-watcher": "^2.1.14"
 	},
 	"scripts": {
+		"build:local": "sam build --template template.local.yaml --profile Development",
 		"build": "sam build --profile Development",
 		"deploy": "sam deploy --profile Development --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND",
-		"serve": "sam local start-api --profile Development --port 9000 --region eu-west-1 --env-vars env.json",
+		"serve": "sam local start-api --profile Development -t .aws-sam/build/template.yaml --port 9000 --region eu-west-1 --env-vars env.json",
 		"docs": "npx swagger-ui-watcher openapi.yaml --port 9090",
 		"dev": "npm-run-all --parallel serve docs",
 		"format": "prettier --write \"src/**/*.{ts,tsx}\"",
