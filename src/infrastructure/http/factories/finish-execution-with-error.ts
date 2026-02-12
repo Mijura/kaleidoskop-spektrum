@@ -1,5 +1,5 @@
 import { FinishExecutionWithErrorUseCase } from "@application/ports/use-cases/finish-execution-with-error"
-import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
+import { errorHandler, Responses, ValidationError } from "@jigjoy-ai/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 
 export function createFinishExecutionWithErrorHandler(finishExecutionWithErrorUseCase: FinishExecutionWithErrorUseCase) {

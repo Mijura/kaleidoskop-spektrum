@@ -1,5 +1,5 @@
 import { GetExecutionHeatmapUseCase } from "@application/ports/use-cases/get-execution-heatmap"
-import { errorHandler, Responses, ValidationError } from "@jigjoy-io/serverless-core"
+import { errorHandler, Responses, ValidationError } from "@jigjoy-ai/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TimeRange } from "@application/value-objects/time-range"
 import { Heatmap } from "@application/value-objects/heatmap"

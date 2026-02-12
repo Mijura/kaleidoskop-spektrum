@@ -1,12 +1,11 @@
 {
-	"name": "observability",
+	"name": "kaleidoskop",
 	"description": "Observability microservice",
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "^3.398.0",
 		"@aws-sdk/lib-dynamodb": "^3.398.0",
-		"@jigjoy-io/serverless-core": "^0.0.3",
 		"uuid": "^13.0.0"
 	},
 	"devDependencies": {
