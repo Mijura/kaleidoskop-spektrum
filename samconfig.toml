@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "observability"
+stack_name = "spektrum-observability"
 
 [default.build.parameters]
 cached = true
@@ -16,9 +16,9 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-s3_prefix = "observability"
+s3_prefix = "spektrum-observability"
 region = "eu-west-1"
-profile = "Development"
+profile = "spektrum-dev"
 image_repositories = []
 
 [default.package.parameters]
