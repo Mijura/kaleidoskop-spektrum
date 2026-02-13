@@ -19,6 +19,9 @@ Resources:
     Properties:
       Handler: src/infrastructure/http/handlers/get-project-executions.handler
       Description: Fetch project timeline task executions
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskExecutionTable
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
@@ -36,6 +39,9 @@ Resources:
     Properties:
       Handler: src/infrastructure/http/handlers/get-account-executions.handler
       Description: Fetch account timeline task executions
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskExecutionTable
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
@@ -53,6 +59,9 @@ Resources:
     Properties:
       Handler: src/infrastructure/http/handlers/get-execution-heatmap.handler
       Description: Fetch heatmap of task executions
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskExecutionTable
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
@@ -70,6 +79,9 @@ Resources:
     Properties:
       Handler: src/infrastructure/http/handlers/start-task-execution.handler
       Description: Start a new task execution
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskExecutionTable
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
@@ -87,6 +99,9 @@ Resources:
     Properties:
       Handler: src/infrastructure/http/handlers/finish-execution-without-error.handler
       Description: Finish a task execution without error
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskExecutionTable
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
@@ -104,6 +119,9 @@ Resources:
     Properties:
       Handler: src/infrastructure/http/handlers/finish-execution-with-error.handler
       Description: Finish a task execution with error
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskExecutionTable
       Environment:
         Variables:
           TASK_EXECUTION_TABLE: !Ref TaskExecutionTable
