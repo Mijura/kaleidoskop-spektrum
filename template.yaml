@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
-  observability
+  Kaleidoskop is a service for monitoring and analyzing Mozaik workflow activities.
 
 Transform:
   - AWS::Serverless-2016-10-31
