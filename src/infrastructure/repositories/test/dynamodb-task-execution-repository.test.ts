@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "@rstest/core"
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb"
-import { DynamoDBTaskExecutionRepository } from "@infrastructure/repositories/dynamodb-task-execution-repository"
+import { DynamoDBTaskExecutionRepository } from "@infrastructure/repositories/task-execution-repository/dynamodb-task-execution-repository"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionStatus } from "@domain/task-execution-status"
 import { Pagination } from "@application/value-objects/pagination"
