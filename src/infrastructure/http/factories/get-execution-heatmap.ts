@@ -7,13 +7,12 @@ import { Heatmap } from "@application/value-objects/heatmap"
 export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: GetExecutionHeatmapUseCase) {
 	return async function getExecutionHeatmapHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
-
-            const accountId = event.pathParameters?.accountId
-			if (!accountId) {
-				throw new ValidationError("Missing required path param: accountId")
+			const userId = event.headers["x-user-id"] || event.headers["X-User-Id"]
+			if (!userId) {
+				throw new ValidationError("Missing required header: x-user-id or X-User-Id")
 			}
 
-            const qs = event.queryStringParameters || {}
+			const qs = event.queryStringParameters || {}
 			const startDate = qs.startDate
 			const endDate = qs.endDate
 
@@ -26,7 +25,7 @@ export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: Get
 				endDate: new Date(endDate).toISOString(),
 			}
 
-			const heatmap: Heatmap[] = await getExecutionHeatmapUseCase.execute(accountId, timeRange)
+			const heatmap: Heatmap[] = await getExecutionHeatmapUseCase.execute(userId, timeRange)
 			return Responses._200(heatmap)
 		} catch (error) {
 			console.error("Error fetching heatmap:", error)

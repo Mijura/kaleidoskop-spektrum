@@ -6,19 +6,27 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TaskExecutionMapper } from "@infrastructure/http/mappers/task-execution"
 
 export function createStartTaskExecutionHandler(startTaskExecutionUseCase: StartTaskExecutionUseCase) {
-	return async function startTaskExecutionHandler({ body }: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+	return async function startTaskExecutionHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
+			if (!event.body) throw new ValidationError("No body")
 
-            if (!body) 
-				throw new ValidationError("No body")
-
-			const { title, projectId, taskId, accountId } = JSON.parse(body)
-            if (!title || !projectId || !taskId || !accountId) {
+			const { title, projectId, taskId } = JSON.parse(event.body)
+			if (!title || !projectId || !taskId) {
 				throw new ValidationError("Missing required body params")
 			}
 
-			const taskExecution: TaskExecution = await startTaskExecutionUseCase.execute(title, projectId, taskId, accountId)
-            const taskExecutionDTO: TaskExecutionDTO = TaskExecutionMapper.toDTO(taskExecution)
+			const userId = event.headers["x-user-id"] || event.headers["X-User-Id"]
+			if (!userId) {
+				throw new ValidationError("Missing required header: x-user-id or X-User-Id")
+			}
+
+			const taskExecution: TaskExecution = await startTaskExecutionUseCase.execute(
+				title,
+				projectId,
+				taskId,
+				userId,
+			)
+			const taskExecutionDTO: TaskExecutionDTO = TaskExecutionMapper.toDTO(taskExecution)
 			return Responses._201(taskExecutionDTO)
 		} catch (error) {
 			console.error("Error starting task execution:", error)

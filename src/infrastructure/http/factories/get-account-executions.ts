@@ -9,10 +9,9 @@ import { Pagination } from "@application/value-objects/pagination"
 export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutionsUseCase) {
 	return async function getAccountExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
-
-            const accountId = event.pathParameters?.accountId
-			if (!accountId) {
-				throw new ValidationError("Missing required path param: accountId")
+			const userId = event.headers["x-user-id"] || event.headers["X-User-Id"]
+			if (!userId) {
+				throw new ValidationError("Missing required header: x-user-id or X-User-Id")
 			}
 
 			const qs = event.queryStringParameters || {}
@@ -29,8 +28,8 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
 				pageSize: pageSize,
 			}
 
-			const taskExecutions: TaskExecution[] = await getAccountExecutionsUseCase.execute(accountId, pagination)
-            const taskExecutionDTOs: TaskExecutionDTO[] = TaskExecutionMapper.toDTOs(taskExecutions)
+			const taskExecutions: TaskExecution[] = await getAccountExecutionsUseCase.execute(userId, pagination)
+			const taskExecutionDTOs: TaskExecutionDTO[] = TaskExecutionMapper.toDTOs(taskExecutions)
 			return Responses._200(taskExecutionDTOs)
 		} catch (error) {
 			console.error("Error fetching account timeline:", error)
