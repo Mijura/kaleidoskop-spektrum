@@ -106,7 +106,7 @@ Resources:
             Description: Start a new task execution (local)
             Environment:
                 Variables:
-                    TASK_EXECUTION_TABLE: "TaskExecution"
+                    TASK_EXECUTION_TABLE: ""
             Events:
                 Api:
                     Type: Api
@@ -156,7 +156,7 @@ Resources:
             Description: Finish a task execution with error (local)
             Environment:
                 Variables:
-                    TASK_EXECUTION_TABLE: "TaskExecution"
+                    TASK_EXECUTION_TABLE: ""
             Events:
                 Api:
                     Type: Api
