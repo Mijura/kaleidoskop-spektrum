@@ -1,18 +1,17 @@
 import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
-import { GetAccountExecutionsUseCase } from "@application/ports/use-cases/get-account-executions"
+import { GetAccountExecutionsUseCase, GetAccountExecutionsUseCaseParams } from "@application/ports/use-cases/get-account-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-ai/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionMapper } from "../mappers/task-execution"
 import { Pagination } from "@application/value-objects/pagination"
+import { Auth } from "@heksagon/app"
+import { UserData } from "@jigjoy-ai/auth"
+import { extractAuthData } from "@heksagon/http"
 
 export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutionsUseCase) {
 	return async function getAccountExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
-			const userId = event.headers["x-user-id"] || event.headers["X-User-Id"]
-			if (!userId) {
-				throw new ValidationError("Missing required header: x-user-id or X-User-Id")
-			}
 
 			const qs = event.queryStringParameters || {}
 
@@ -23,12 +22,19 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
 				throw new ValidationError("Invalid page or size query params")
 			}
 
+
+			const auth: Auth<UserData> = extractAuthData(event)
+
 			const pagination: Pagination = {
 				pageNumber: pageNumber,
 				pageSize: pageSize,
 			}
 
-			const taskExecutions: TaskExecution[] = await getAccountExecutionsUseCase.execute(userId, pagination)
+			const params: GetAccountExecutionsUseCaseParams = {
+				pagination,
+			}
+			const taskExecutions: TaskExecution[] = await getAccountExecutionsUseCase.execute(auth, params)
+            
 			const taskExecutionDTOs: TaskExecutionDTO[] = TaskExecutionMapper.toDTOs(taskExecutions)
 			return Responses._200(taskExecutionDTOs)
 		} catch (error) {
