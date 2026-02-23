@@ -12,7 +12,7 @@ import { extractAuthData } from "@heksagon/http"
 export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: GetAccountExecutionsUseCase) {
 	return async function getAccountExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
-			
+
 			const qs = event.queryStringParameters || {}
 
 			const pageNumber = qs.page ? parseInt(qs.page, 10) : 1
@@ -29,6 +29,7 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
 				pageNumber: pageNumber,
 				pageSize: pageSize,
 			}
+
 			const params: GetAccountExecutionsUseCaseParams = {
 				pagination,
 			}

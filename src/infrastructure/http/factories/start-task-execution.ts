@@ -11,6 +11,7 @@ import { extractAuthData } from "@heksagon/http"
 export function createStartTaskExecutionHandler(startTaskExecutionUseCase: StartTaskExecutionUseCase) {
 	return async function startTaskExecutionHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
+			if (!event.body) throw new ValidationError("No body")
 
             if (!event.body) 
 				throw new ValidationError("No body")
@@ -29,6 +30,7 @@ export function createStartTaskExecutionHandler(startTaskExecutionUseCase: Start
 			}
 			const taskExecution: TaskExecution = await startTaskExecutionUseCase.execute(auth, params)
             const taskExecutionDTO: TaskExecutionDTO = TaskExecutionMapper.toDTO(taskExecution)
+
 			return Responses._201(taskExecutionDTO)
 		} catch (error) {
 			console.error("Error starting task execution:", error)

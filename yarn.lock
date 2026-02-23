@@ -469,6 +469,7 @@
   resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.27.0.tgz"
   integrity sha512-1hBWx4OUJE2cab++aVZ7pObD6s+DK4mPGpemtnAORBvb5l/g5xFGk0vc0PjSkrDs0XaXj9yyob3d14XqvnQ4gw==
 
+<<<<<<< HEAD
 "@heksagon/app@^0.0.14":
   version "0.0.14"
   resolved "https://registry.npmjs.org/@heksagon/app/-/app-0.0.14.tgz"
@@ -486,6 +487,8 @@
   resolved "https://npm.pkg.github.com/download/@jigjoy-ai/auth/0.1.0/45041426d4c2bc0b770aa8274bf36588f83ff7ba"
   integrity sha512-wDQBqq3e4Rf0To4H8OIzpH/dxQ4COEze5WuVpRBdvh+c9jOXnHfHnYI2/iPWz4Em5nEqph55KKVFfv0kxTu6Bw==
 
+=======
+>>>>>>> development
 "@jigjoy-ai/serverless-core@^0.0.5":
   version "0.0.5"
   resolved "https://npm.pkg.github.com/download/@jigjoy-ai/serverless-core/0.0.5/324df1b75907b6d79d8b5b58ef7b47471478f849"

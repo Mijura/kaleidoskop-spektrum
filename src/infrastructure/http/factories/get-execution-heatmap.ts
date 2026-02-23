@@ -10,7 +10,9 @@ import { extractAuthData } from "@heksagon/http"
 export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: GetExecutionHeatmapUseCase) {
 	return async function getExecutionHeatmapHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 		try {
+
             const qs = event.queryStringParameters || {}
+
 			const startDate = qs.startDate
 			const endDate = qs.endDate
 
@@ -29,6 +31,7 @@ export function createGetExecutionHeatmapHandler(getExecutionHeatmapUseCase: Get
 				timeRange,
 			}
 			const heatmap: Heatmap[] = await getExecutionHeatmapUseCase.execute(auth, params)
+
 			return Responses._200(heatmap)
 		} catch (error) {
 			console.error("Error fetching heatmap:", error)
