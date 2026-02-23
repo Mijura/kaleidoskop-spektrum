@@ -1,10 +1,13 @@
 import { Pagination } from "@application/value-objects/pagination"
 import { TaskExecutionDTO } from "@infrastructure/http/dto/task-execution"
-import { GetProjectExecutionsUseCase } from "@application/ports/use-cases/get-project-executions"
+import { GetProjectExecutionsUseCase, GetProjectExecutionsUseCaseParams } from "@application/ports/use-cases/get-project-executions"
 import { errorHandler, Responses, ValidationError } from "@jigjoy-ai/serverless-core"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { TaskExecution } from "@domain/task-execution"
 import { TaskExecutionMapper } from "../mappers/task-execution"
+import { UserData } from "@jigjoy-ai/auth"
+import { Auth } from "@heksagon/app"
+import { extractAuthData } from "@heksagon/http"
 
 export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: GetProjectExecutionsUseCase) {
 	return async function getProjectExecutionsHandler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
@@ -28,7 +31,13 @@ export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: G
 				pageSize: pageSize,
 			}
 
-			const taskExecutions: TaskExecution[] = await getProjectExecutionsUseCase.execute(projectId, pagination)
+			const auth: Auth<UserData> = extractAuthData(event)
+
+			const params: GetProjectExecutionsUseCaseParams = {
+				projectId,
+				pagination,
+			}
+			const taskExecutions: TaskExecution[] = await getProjectExecutionsUseCase.execute(auth, params)
             const taskExecutionDTOs: TaskExecutionDTO[] = TaskExecutionMapper.toDTOs(taskExecutions)
 			return Responses._200(taskExecutionDTOs)
 		} catch (error) {
