@@ -23,7 +23,7 @@ export function createGetAccountExecutionsHandler(getAccountExecutionsUseCase: G
 			}
 
 
-			const auth: Auth<UserData> = extractAuthData(event)
+			const auth: Auth<UserData> = extractAuthData(event.headers)
 
 			const pagination: Pagination = {
 				pageNumber: pageNumber,

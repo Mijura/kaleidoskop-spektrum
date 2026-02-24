@@ -18,7 +18,7 @@ export function createFinishExecutionWithErrorHandler(finishExecutionWithErrorUs
 				throw new ValidationError("Missing required body params")
 			}
 
-			const auth: Auth<UserData> = extractAuthData(event)
+			const auth: Auth<UserData> = extractAuthData(event.headers)
 
 			const params: FinishExecutionWithErrorUseCaseParams = {
 				taskExecutionId,

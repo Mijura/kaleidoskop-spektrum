@@ -31,7 +31,7 @@ export function createGetProjectExecutionsHandler(getProjectExecutionsUseCase: G
 				pageSize: pageSize,
 			}
 
-			const auth: Auth<UserData> = extractAuthData(event)
+			const auth: Auth<UserData> = extractAuthData(event.headers)
 
 			const params: GetProjectExecutionsUseCaseParams = {
 				projectId,
