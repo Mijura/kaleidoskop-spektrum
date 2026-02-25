@@ -16,8 +16,8 @@ export function createStartTaskExecutionHandler(startTaskExecutionUseCase: Start
             if (!event.body) 
 				throw new ValidationError("No body")
 
-			const { title, projectId, taskId, accountId } = JSON.parse(event.body)
-            if (!title || !projectId || !taskId || !accountId) {
+			const { title, projectId, taskId } = JSON.parse(event.body)
+            if (!title || !projectId || !taskId) {
 				throw new ValidationError("Missing required body params")
 			}
 
