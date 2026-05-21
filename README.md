@@ -1,6 +1,14 @@
-# Kaleidoskop
+# kaleidoskop-spektrum
 
-Kaleidoskop is a platform for monitoring and analyzing Mozaik workflow activity.
+> **Note:** this service used to be named `kaleidoskop`. The name was
+> handed off to the JigJoy platform replay tool
+> (https://github.com/jigjoy-ai/kaleidoskop) in May 2026; this repo
+> continues to back the Spektrum platform's observability needs.
+
+Spektrum platform observability microservice — tracks task execution
+timelines via Lambda + DynamoDB. CloudFormation stack name is still
+`spektrum-observability` (unchanged so platform-serverless-api imports
+keep working).
 
 ![kaleidoskop](https://github.com/user-attachments/assets/5147ad6a-9596-49ce-ab08-feb9f93f5808)
 
