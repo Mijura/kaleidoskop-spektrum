@@ -1,6 +1,6 @@
 {
-	"name": "kaleidoskop",
-	"description": "Observability microservice",
+	"name": "kaleidoskop-spektrum",
+	"description": "Spektrum platform observability microservice. (The kaleidoskop name was renamed when the JigJoy replay tool inherited it; see github.com/jigjoy-ai/kaleidoskop.)",
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
